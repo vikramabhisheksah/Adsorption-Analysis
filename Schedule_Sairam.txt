@@ -1,8 +1,8 @@
 Deliverables(16 hours)
 
-1. Understand the correlation between adsorbents, adsorbates, energy and miller index.
-2. Explore the data, understand the dataset and preprocess it.
-3. Converting the pkl files data to dataframe.
-4. Clean the dataset to change the pKey from - ('bulk_mpid', 'miller_index', 'adsorption_site')  to  (only 'bulk_mpid', 'miller_index' ) and take only those rows with the lowest 'energy' such that 'adsorption_site' is no longer a pKey [5]
-5. Plan which visualizations to display, ideate a 3d visualization out of the data.
-6. Start 2d visualizations from the data.
+1. Understand the correlation between adsorbents, adsorbates, energy and miller index.[2]
+2. Explore the data, understand the dataset and preprocess it.[2]
+3. Converting the pkl files data to dataframe and setting the indices for easy access.[2]
+4. Clean the dataset to change the pKey from - ('bulk_mpid', 'miller_index', 'adsorption_site')  to  (only 'bulk_mpid', 'miller_index' ) and take only those rows with the lowest 'energy' such that 'adsorption_site' is no longer a pKey [3]
+5. Plan which visualizations to display, ideate a 3d visualization out of the data.[3]
+6. Start 2d visualizations from the data.[4]
