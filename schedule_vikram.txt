@@ -1,0 +1,14 @@
+Project Schedule
+
+# Work on getting access to Shyam's machine	[1]
+
+# Get the dataset_all_full_460k.pkl file to your local  [1]
+
+# Investigate what adsorbent hierarchy to work on as per Shyam's request - single metal, binary metal, ternary metal, etc [2]
+
+# Select which adsorbates to include. [1]
+
+
+# Clean the dataset to change the pKey from - ('bulk_mpid', 'miller_index', 'adsorption_site')  to  (only 'bulk_mpid', 'miller_index' ) and take only those rows with the lowest 'energy' such that 'adsorption_site' is no longer a pKey [5]
+
+# Process the data and segregate the data for each adsorbate, and adsorbent pair. [5]
