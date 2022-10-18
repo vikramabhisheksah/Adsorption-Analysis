@@ -1,0 +1,12 @@
+Deliverables (16-hours) 
+
+
+#project schedule 
+
+
+* Learning more about Miller_index and the factors surrounding it. (2)
+* Segregation of data depending on the factors required/set  by the client. (3) 
+* Perform basic data preprocessing on the data. (3)
+* Process the data and segregate the data for each adsorbate, and adsorbent pair. (3)
+* Data and task abstraction. (3)
+* Getting to know about different cartesian coordinates involved, like the Adsorption site. (2).
