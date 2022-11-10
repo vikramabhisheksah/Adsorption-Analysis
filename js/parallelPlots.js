@@ -76,6 +76,12 @@ const createParallelPlot = () => {
   var mouseover = function (d) {
     Tooltip.style("opacity", 1);
     d3.select(this).style("stroke", "black").style("opacity", 1);
+    miller_indices= d.target.__data__.miller_index
+    miller_indices = miller_indices.replace('(','')
+    miller_indices = miller_indices.replace(')','')
+    miller_indices = miller_indices.split(",")
+
+    // drawThreePointTriangle(miller_indices[0],miller_indices[1],miller_indices[2]);
   };
   var mousemove = function (d) {
     Tooltip.html(
