@@ -1,94 +1,24 @@
 <!DOCTYPE html>
-<html lang='en'>
- 
-<head>
-    <meta charset="utf-8">
- 
-    <title>
-       Placeholder
-    </title>
- 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
- 
-        body {
-            margin: 2%;
-            justify-content: center;
-            overflow: hidden;
-        }
- 
-        .box-wrapper {
-            height: 95vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-        }
- 
-        #box3 {
-            padding: 10px;
-            flex-grow: 1;
-            display: flex;
-        
-        }
- 
-        #box4 {
-            flex-grow: 2;
-            border: solid 1px orange;
-            background-color: orange
-        }
- 
-        .middle-column {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
- 
-        .middle-column div {
-            flex-grow: 1;
-            margin: 0 8px;
-            border: solid 1px red;
-        }
- 
-        .middle-column div+div {
-            margin-top: 8px
-        }
- 
-        #box5 {
-            flex-grow: 1;
-            border: solid 1px yellow;
-            background-color: yellow
-        }
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Adsorption Analysis</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <script src="lib/js/three.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/paulmasson/threejs-with-controls@r121/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
 
-        #box6 {
-            padding: 10px;
-            border: solid 1px green;
-            background-color:green
-        }
-    </style>
-</head>
- 
-<body>
+  <body>
     <div class="box-wrapper">
-        <h2>Placeholder</h2>
-        <div id="box3">
-            <div id="box4">
-                <b>Main View</b>
-            </div>
-            <div class="middle-column">
-                <div id="box5">
-                    <b>Side View 1</b>
-                </div>
-                <div id="box6">
-                    <b>Side View 2</b>
-                </div>
-            </div>
-        </div>
+      <div id="box4"></div>
+      <div class="middle-column">
+        <div id="box5"></div>
+        <div id="box6"></div>
+      </div>
     </div>
-</body>
- 
+    <script src="js/parallelPlots.js"></script>
+  </body>
 </html>

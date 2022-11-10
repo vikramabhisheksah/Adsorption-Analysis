@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .box-wrapper {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+  }
+
+  #box4 {
+    flex-grow: 2;
+
+  }
+
+  .middle-column {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .middle-column div {
+    flex-grow: 1;
+    margin: 0 8px;
+    border: solid 1px red;
+  }
+
+  .middle-column div + div {
+    margin-top: 8px;
+  }
+
+  #box5 {
+    flex-grow: 1;
+    border: solid 1px yellow;
+    background-color: yellow;
+  }
+
+  #box6 {
+    padding: 10px;
+    border: solid 1px green;
+    background-color: green;
+  }
