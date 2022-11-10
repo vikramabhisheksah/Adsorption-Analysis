@@ -22,7 +22,11 @@ const createParallelPlot = () => {
     y[adsorbate] = d3.scaleLinear().domain([-10, 10]).range([height, 0]);
   }
 
-  x = d3.scalePoint().range([margin.left, width-margin.right]).padding(1).domain(keys);
+  x = d3
+    .scalePoint()
+    .range([margin.left, width - margin.right])
+    .padding(1)
+    .domain(keys);
 
   svg
     .selectAll("axis")
@@ -44,6 +48,7 @@ const createParallelPlot = () => {
     .style("fill", "black")
     .style("font-weight", "500");
 
+  //separate function to create lines
   function line(d) {
     return d3.line()(
       keys.map(function (p) {
@@ -54,7 +59,7 @@ const createParallelPlot = () => {
           val = d.energy_n;
         } else if (p == "*O") {
           val = d.energy_o;
-        } else{
+        } else {
           val = d.energy_oh;
         }
         return [x(p), y[p](val)];
@@ -62,6 +67,7 @@ const createParallelPlot = () => {
     );
   }
 
+  //generate tooltips
   var Tooltip = d3
     .select("#parallelPlots")
     .append("div")
@@ -73,32 +79,44 @@ const createParallelPlot = () => {
     .style("border-radius", "5px")
     .style("padding", "5px");
 
+  //functions for mouseover, mousemove and mouseleave
   var mouseover = function (d) {
     Tooltip.style("opacity", 1);
     d3.select(this).style("stroke", "black").style("opacity", 1);
-    miller_indices= d.target.__data__.miller_index
-    miller_indices = miller_indices.replace('(','')
-    miller_indices = miller_indices.replace(')','')
-    miller_indices = miller_indices.split(",")
-
+    miller_indices = d.target.__data__.miller_index;
+    miller_indices = miller_indices.replace("(", "");
+    miller_indices = miller_indices.replace(")", "");
+    miller_indices = miller_indices.split(",");
+    //The function is not ready to be used in alpha release
     // drawThreePointTriangle(miller_indices[0],miller_indices[1],miller_indices[2]);
   };
   var mousemove = function (d) {
     Tooltip.html(
-    'bulk mpid:' + d.target.__data__.bulk_mpid + '<br/>' +
-    'bulk symbols:&emsp' + d.target.__data__.bulk_symbols +'<br/>' +
-    'miller index:' + d.target.__data__.miller_index +'<br/>' +
-    'shift:' + d.target.__data__.shift +'<br/>' +
-    'top:' + d.target.__data__.top 
+      "bulk mpid:" +
+        d.target.__data__.bulk_mpid +
+        "<br/>" +
+        "bulk symbols:" +
+        d.target.__data__.bulk_symbols +
+        "<br/>" +
+        "miller index:" +
+        d.target.__data__.miller_index +
+        "<br/>" +
+        "shift:" +
+        d.target.__data__.shift +
+        "<br/>" +
+        "top:" +
+        d.target.__data__.top
     )
-      .style("left", (d.pageX)+70+"px")
-      .style("top", (d.pageY)+"px");
+      .style("left", d.pageX + 70 + "px")
+      .style("top", d.pageY + "px");
   };
+
   var mouseleave = function (d) {
     Tooltip.style("opacity", 0);
     d3.select(this).style("stroke", "#69b3a2").style("opacity", 0.5);
   };
 
+  //Adding the individual paths to the visualization
   svg
     .selectAll("path")
     .data(data)
@@ -107,11 +125,10 @@ const createParallelPlot = () => {
     .style("fill", "none")
     .style("stroke", "#69b3a2")
     .style("opacity", 0.5)
-    .attr("stroke-width",'2px')
+    .attr("stroke-width", "2px")
     .on("mouseover", mouseover)
     .on("mousemove", mousemove)
-    .on("mouseleave", mouseleave)
-
+    .on("mouseleave", mouseleave);
 };
 
 const loadData = (file) => {
