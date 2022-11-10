@@ -15,18 +15,14 @@ const createParallelPlot = () => {
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   var keys = ["*H", "*N", "*O", "*OH"];
-  
+
   const y = {};
   for (i in keys) {
     adsorbate = keys[i];
-    y[adsorbate] = d3
-      .scaleLinear()
-      .domain([-10,10])
-      .range([height, 0]);
+    y[adsorbate] = d3.scaleLinear().domain([-10, 10]).range([height, 0]);
   }
 
-
-  x = d3.scalePoint().range([0, width]).padding(1).domain(keys);
+  x = d3.scalePoint().range([margin.left, width-margin.right]).padding(1).domain(keys);
 
   svg
     .selectAll("axis")
@@ -35,44 +31,81 @@ const createParallelPlot = () => {
     .enter()
     .append("g")
     // I translate this element to its right position on the x axis
-    .attr("transform", (d) =>"translate(" + x(d) + ")")
+    .attr("transform", (d) => "translate(" + x(d) + ")")
     .each(function (d) {
       d3.select(this).call(d3.axisLeft().scale(y[d]));
     })
     // Add axis title
     .append("text")
     .style("text-anchor", "left")
-    .style('font-size', '14px')
+    .style("font-size", "14px")
     .attr("y", -20)
-    .text(d=>d)
+    .text((d) => d)
     .style("fill", "black")
-    .style('font-weight', '500');
+    .style("font-weight", "500");
 
-    // "*H", "*N", "*O", "*OH"
-    function line(d) {
-       return d3.line()(keys.map(function(p) 
-        { var val =0
-            if(p === "*H"){
-                val = d.energy_h
-            } else if(p === "*N"){
-                val = d.energy_n
-            }else if(p === "*O"){
-                val = d.energy_o
-            }else if(p === "*OH"){
-                val = d.energy_oh
-            }
-            return [x(p), y[p](val)]; 
-        }))
-    }
+  function line(d) {
+    return d3.line()(
+      keys.map(function (p) {
+        var val = 0;
+        if (p == "*H") {
+          val = d.energy_h;
+        } else if (p == "*N") {
+          val = d.energy_n;
+        } else if (p == "*O") {
+          val = d.energy_o;
+        } else{
+          val = d.energy_oh;
+        }
+        return [x(p), y[p](val)];
+      })
+    );
+  }
 
-    svg
+  var Tooltip = d3
+    .select("#parallelPlots")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px");
+
+  var mouseover = function (d) {
+    Tooltip.style("opacity", 1);
+    d3.select(this).style("stroke", "black").style("opacity", 1);
+  };
+  var mousemove = function (d) {
+    Tooltip.html(
+    'bulk mpid:' + d.target.__data__.bulk_mpid + '<br/>' +
+    'bulk symbols:&emsp' + d.target.__data__.bulk_symbols +'<br/>' +
+    'miller index:' + d.target.__data__.miller_index +'<br/>' +
+    'shift:' + d.target.__data__.shift +'<br/>' +
+    'top:' + d.target.__data__.top 
+    )
+      .style("left", (d.pageX)+70+"px")
+      .style("top", (d.pageY)+"px");
+  };
+  var mouseleave = function (d) {
+    Tooltip.style("opacity", 0);
+    d3.select(this).style("stroke", "#69b3a2").style("opacity", 0.5);
+  };
+
+  svg
     .selectAll("path")
     .data(data)
     .join("path")
-    .attr("d", (d)=> line(d))
+    .attr("d", (d) => line(d))
     .style("fill", "none")
     .style("stroke", "#69b3a2")
     .style("opacity", 0.5)
+    .attr("stroke-width",'2px')
+    .on("mouseover", mouseover)
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave)
+
 };
 
 const loadData = (file) => {
@@ -89,24 +122,22 @@ const loadData = (file) => {
 
       // add the element to the data collection
       data.push({
-        bulk_symbols:   d.bulk_symbols,
+        bulk_symbols: d.bulk_symbols,
         // ads_symbols: d.ads_symbols,
-        miller_index:   d.miller_index,
-        bulk_mpid:      d.bulk_mpid,
-        class:          d.class,
-        shift:          d.shift,
-        top:            d.top,
+        miller_index: d.miller_index,
+        bulk_mpid: d.bulk_mpid,
+        class: d.class,
+        shift: d.shift,
+        top: d.top,
         // adsorption_site: d.adsorption_site,
-        energy_oh:      d.energy_oh,
-        energy_h:       d.energy_h,
-        energy_n:       d.energy_n,
-        energy_o:       d.energy_o,
+        energy_oh: d.energy_oh,
+        energy_h: d.energy_h,
+        energy_n: d.energy_n,
+        energy_o: d.energy_o,
       });
     });
-    console.log(data[0]);
-    console.log(bounds);
+
     createParallelPlot();
   });
 };
-
 loadData("./data/clean_data_vds_new.csv");
