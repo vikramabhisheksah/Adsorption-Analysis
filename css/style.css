@@ -15,7 +15,7 @@
 
   } */
 
-  .middle-column {
+  /* .middle-column {
 
     display: flex;
     flex-direction: column;
@@ -35,10 +35,9 @@
 
     border: solid 1px yellow;
     background-color: yellow;
-  }
+  } */
 
-  #box6 {
+  /* #box6 {
     padding: 10px;
-    border: solid 1px green;
-    background-color: green;
-  }
+    /* background-color: green; */
+  /* } */ 
