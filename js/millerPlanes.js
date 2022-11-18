@@ -6,7 +6,7 @@ const light = new THREE.DirectionalLight(0xffffff, 0.1);
 light.position.set(0, 2, 20);
 
 const sizes = {
-  width: window.innerWidth * 0.35,
+  width: window.innerWidth * 0.4,
   height: window.innerHeight * 0.4,
 };
 

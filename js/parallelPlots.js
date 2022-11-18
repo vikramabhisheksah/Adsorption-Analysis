@@ -1,20 +1,23 @@
 var data = [];
 const bounds = {};
 
+const svgWidth = 1000,
+    svgHeight = 600;
+
 const createParallelPlot = () => {
-  var margin = { top: 80, right: 10, bottom: 10, left: 0 },
-    width = 1000 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+  var margin = { top: 80, right: 30, bottom: 80, left: 30 },
+    width = svgWidth - margin.left - margin.right,
+    height = svgHeight - margin.top - margin.bottom;
 
   var svg = d3
     .select("#parallelPlots")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width",svgWidth)
+    .attr("height", svgHeight)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var keys = ["*H", "*N", "*O", "*OH"];
+  var keys = ["*OH","*H", "*N", "*O"];
 
   const y = {};
   for (i in keys) {
@@ -24,17 +27,17 @@ const createParallelPlot = () => {
 
   x = d3
     .scalePoint()
-    .range([margin.left, width - margin.right])
-    .padding(1)
+    .range([0, width])
+    .padding(0.25)
     .domain(keys);
 
   svg
-    .selectAll("axis")
+    .selectAll(".adsorbate")
     // For each dimension of the dataset add a 'g' element:\
     .data(keys)
     .enter()
     .append("g")
-    // I translate this element to its right position on the x axis
+    .attr("class", "adsorbate")
     .attr("transform", (d) => "translate(" + x(d) + ")")
     .each(function (d) {
       d3.select(this).call(d3.axisLeft().scale(y[d]));
@@ -50,7 +53,7 @@ const createParallelPlot = () => {
 
   //separate function to create lines
   function line(d) {
-    return d3.line()(
+    pts =  d3.line()(
       keys.map(function (p) {
         var val = 0;
         if (p == "*H") {
@@ -62,9 +65,12 @@ const createParallelPlot = () => {
         } else {
           val = d.energy_oh;
         }
+        // console.log([x(p), y[p](val)])
         return [x(p), y[p](val)];
       })
     );
+    console.log(pts)
+    return pts
   }
 
   //generate tooltips
@@ -118,14 +124,16 @@ const createParallelPlot = () => {
 
   //Adding the individual paths to the visualization
   svg
+    // // .enter()
+    .append("g")
     .selectAll("path")
     .data(data)
-    .join("path")
+    .enter().append("path")
     .attr("d", (d) => line(d))
     .style("fill", "none")
     .style("stroke", "#69b3a2")
     .style("opacity", 0.5)
-    .attr("stroke-width", "2px")
+    .attr("stroke-width", "0.2px")
     .on("mouseover", mouseover)
     .on("mousemove", mousemove)
     .on("mouseleave", mouseleave);
