@@ -2,7 +2,7 @@ var data = [];
 const bounds = {};
 
 const svgWidth = 1000,
-    svgHeight = 600;
+  svgHeight = 600;
 
 const createParallelPlot = () => {
   var margin = { top: 80, right: 30, bottom: 80, left: 30 },
@@ -12,12 +12,12 @@ const createParallelPlot = () => {
   var svg = d3
     .select("#parallelPlots")
     .append("svg")
-    .attr("width",svgWidth)
+    .attr("width", svgWidth)
     .attr("height", svgHeight)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var keys = ["*OH","*H", "*N", "*O"];
+  var keys = ["*OH", "*H", "*N", "*O"];
 
   const y = {};
   for (i in keys) {
@@ -25,11 +25,7 @@ const createParallelPlot = () => {
     y[adsorbate] = d3.scaleLinear().domain([-10, 10]).range([height, 0]);
   }
 
-  x = d3
-    .scalePoint()
-    .range([0, width])
-    .padding(0.25)
-    .domain(keys);
+  x = d3.scalePoint().range([0, width]).padding(0.25).domain(keys);
 
   svg
     .selectAll(".adsorbate")
@@ -53,7 +49,7 @@ const createParallelPlot = () => {
 
   //separate function to create lines
   function line(d) {
-    pts =  d3.line()(
+    pts = d3.line()(
       keys.map(function (p) {
         var val = 0;
         if (p == "*H") {
@@ -69,9 +65,71 @@ const createParallelPlot = () => {
         return [x(p), y[p](val)];
       })
     );
-    console.log(pts)
-    return pts
+    return pts;
   }
+
+  const classKeys = [
+    "Single Metals",
+    "Binary metals",
+    "Ternary Plus Metals(3+)",
+    "Non Metals",
+  ];
+
+  //generate color pallete
+  var colorParallelPlot = d3
+    .scaleOrdinal()
+    .domain([0, 1, 2, 3])
+    .range(["#ff005d", "#DDFF00", "#00FFA2", "#2200FF"]);
+
+  var svgLegned = d3
+    .select("#parallelPlots")
+    .append("div")
+    .attr("class", "legend")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", 50);
+
+  var dataL = 0;
+  var offset = 220;
+
+  var legend = svgLegned
+    .selectAll(".legend")
+    .data(classKeys)
+    .enter()
+    .append("g")
+    .attr("class", "legends4")
+    .attr("transform", function (d, i) {
+      if (i === 0) {
+        dataL = d.length + offset;
+        return "translate(0,0)";
+      } else {
+        var newdataL = dataL;
+        dataL += d.length + offset;
+        return "translate(" + newdataL + ",0)";
+      }
+    })
+    .attr("id", (d, i) => "class-" + i);
+
+  legend
+    .append("rect")
+    .attr("x", 80)
+    .attr("y", 0)
+    .attr("width", 10)
+    .attr("height", 10)
+    .style("fill", function (d, i) {
+      return colorParallelPlot(i);
+    });
+
+  legend
+    .append("text")
+    .attr("x", 100)
+    .attr("y", 10)
+    .text(function (d, i) {
+      return d;
+    })
+    .attr("class", "textselected")
+    .style("text-anchor", "start")
+    .style("font-size", 15);
 
   //generate tooltips
   var Tooltip = d3
@@ -124,16 +182,16 @@ const createParallelPlot = () => {
 
   //Adding the individual paths to the visualization
   svg
-    // // .enter()
     .append("g")
     .selectAll("path")
     .data(data)
-    .enter().append("path")
+    .enter()
+    .append("path")
     .attr("d", (d) => line(d))
     .style("fill", "none")
-    .style("stroke", "#69b3a2")
+    .style("stroke", (d) => colorParallelPlot(d.class))
     .style("opacity", 0.5)
-    .attr("stroke-width", "0.2px")
+    .attr("stroke-width", "0.5px")
     .on("mouseover", mouseover)
     .on("mousemove", mousemove)
     .on("mouseleave", mouseleave);
@@ -157,7 +215,7 @@ const loadData = (file) => {
         // ads_symbols: d.ads_symbols,
         miller_index: d.miller_index,
         bulk_mpid: d.bulk_mpid,
-        class: d.class,
+        class: parseInt(d.class),
         shift: d.shift,
         top: d.top,
         // adsorption_site: d.adsorption_site,
