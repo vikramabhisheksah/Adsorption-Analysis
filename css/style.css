@@ -1,24 +1,36 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  .box-wrapper {
-    height: 100vh;
-    width: 100%;
-    display: flex;
-  }
+body {
+  background-image: url("../img/backg.jpeg");
+  /* display: flex;
+  height: 100%;
+  width: 100%; */
+  background-size: 100% 100%;
+  background-position: flex;
+  background-repeat: repeat;
+  margin: 0px;
+  overflow-x: hidden;
+  font-family: montserrat;
+}
+.box-wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+}
 
-  .support-viz{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
+.support-viz {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  #periodicTable{
-    padding: 10% 0 ;
-  }
+#periodicTable {
+  padding: 10% 0;
+}
 /* ----kushal periodic table---- */
 
 .state circle {
@@ -28,7 +40,7 @@
 */
   stroke: #2098d1;
   stroke-width: 5px;
-  fill:blue;
+  fill: blue;
   opacity: 0.3;
 }
 
@@ -38,18 +50,43 @@
 }
 
 .state circle:hover {
-  fill: white ;
+  fill: white;
 }
 
 div.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 60px;
-    height: 28px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+nav {
+  background: #edebeb78;
+  height: 80px;
+  width: 100%;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  display: flex;
+  justify-content: space-between;
+}
+
+label.logo {
+  color: #010101d8;
+  font-size: 25px;
+  line-height: 80px;
+  padding: 0 100px;
+  font-weight: bold;
+}
+
+.plots {
+  width: 900px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* background-color: black; */
 }
