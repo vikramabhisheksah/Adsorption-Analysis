@@ -1,90 +1,126 @@
-const canvas = document.querySelector("canvas.scene");
+const plotItem = (x, y, z) => {
+  const canvas = document.createElement("canvas");
+  const plots = document.querySelector("div.plots");
+  plots.appendChild(canvas);
 
-const scene = new THREE.Scene();
+  const scene = new THREE.Scene();
 
-const light = new THREE.DirectionalLight(0xffffff, 0.1);
-light.position.set(0, 2, 20);
+  const sizes = {
+    width: canvas.width,
+    height: canvas.height,
+  };
 
-const sizes = {
-  width: window.innerWidth * 0.4,
-  height: window.innerHeight * 0.4,
-};
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  scene.add(camera);
 
-const camera = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-scene.add(camera);
+  const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+  });
 
-const renderer = new THREE.WebGLRenderer({
-  // alpha: true ,
-  canvas: canvas,
-});
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-camera.position.set(2, 2, 2);
-camera.lookAt(0, 0, 0);
-controls.update();
-
-//controls.update() must be called after any manual changes to the camera's transform
-
-renderer.setSize(sizes.width, sizes.height);
-
-function drawLine(p1, p2) {
-  const material = new THREE.LineBasicMaterial({ color: "yellow" });
-  const points = [];
-  points.push(new THREE.Vector3(...p1));
-  points.push(new THREE.Vector3(...p2));
-  const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  const line = new THREE.Line(geometry, material);
-  scene.add(line);
-}
-
-function drawTriangle(points) {
-  drawLine(points[0], points[1]);
-  drawLine(points[1], points[2]);
-  drawLine(points[2], points[0]);
-}
-
-const axesHelper = new THREE.AxesHelper(10);
-scene.add(axesHelper);
-
-function drawThreePointTriangle(p1, p2, p3) {
-  const max = Math.max(p1, p2, p3);
-
-  if (max > 1) {
-    p1 /= max;
-    p2 /= max;
-    p3 /= max;
-  }
-
-  const min = Math.min(p1, p2, p3);
-
-  if (min < -1) {
-    p1 /= min;
-    p2 /= min;
-    p3 /= min;
-  }
-
-  drawTriangle([
-    [p1, 0, 0],
-    [0, p2, 0],
-    [0, 0, p3],
-  ]);
-}
-
-drawThreePointTriangle(1, 1, 1);
-
-const animate = () => {
+  camera.position.set(2, 2, 2);
+  camera.lookAt(0, 0, 0);
   controls.update();
 
-  renderer.render(scene, camera);
+  renderer.setSize(sizes.width, sizes.height);
 
-  // Call animate for each frame
-  window.requestAnimationFrame(animate);
+  const axesHelper1 = new THREE.AxesHelper(-10);
+  const axesHelper = new THREE.AxesHelper(10);
+  scene.add(axesHelper1);
+  scene.add(axesHelper);
+
+  function drawThreePointTriangle(p1, p2, p3) {
+    const max = Math.max(p1, p2, p3);
+
+    if (max > 1) {
+      p1 /= max;
+      p2 /= max;
+      p3 /= max;
+    }
+
+    const min = Math.min(p1, p2, p3);
+
+    if (min < -1) {
+      p1 /= min;
+      p2 /= min;
+      p3 /= min;
+    }
+
+    function createPolygon(vertices) {
+      var v3 = vertices.map(([x, y, z]) => {
+        if (x === y && y === z) {
+          return new THREE.Vector3(x + 0.00000001, y, z);
+        } else {
+          return new THREE.Vector3(x, y, z);
+        }
+      });
+
+      var holes = [];
+      var triangles, mesh;
+      var geometry = new THREE.Geometry();
+      var material = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        opacity: 0.4,
+        transparent: true,
+      });
+
+      geometry.vertices = v3;
+
+      triangles = THREE.ShapeUtils.triangulateShape(v3, holes);
+
+      for (var i = 0; i < triangles.length; i++) {
+        geometry.faces.push(
+          new THREE.Face3(triangles[i][0], triangles[i][1], triangles[i][2])
+        );
+        geometry.faces.push(
+          new THREE.Face3(triangles[i][2], triangles[i][1], triangles[i][0])
+        );
+      }
+
+      mesh = new THREE.Mesh(geometry, material);
+
+      return mesh;
+    }
+
+    scene.add(
+      createPolygon([
+        [p1, 0, 0],
+        [0, p2, 0],
+        [0, 0, p3],
+      ])
+    );
+  }
+
+  drawThreePointTriangle(x, y, z);
+
+  const animate = () => {
+    controls.update();
+
+    renderer.render(scene, camera);
+
+    // Call animate for each frame
+    window.requestAnimationFrame(animate);
+  };
+
+  animate();
 };
 
-animate();
+plotItem(1, 1, 1);
+plotItem(0, 1, 1);
+plotItem(0, -1, 1);
+plotItem(0, 1, -1);
+plotItem(-1, 1, 1);
+plotItem(1, 1, -1);
+plotItem(1, -1, 1);
+
+document.querySelectorAll("div.plots > canvas").forEach((item, ind) => {
+  item.addEventListener("click", () => {
+    console.log(`Click on ${ind}`);
+  });
+});
