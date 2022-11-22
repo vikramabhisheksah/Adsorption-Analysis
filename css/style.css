@@ -21,7 +21,6 @@ body {
   width: 100%;
   display: flex;
 }
-
 .support-viz {
   display: flex;
   flex-direction: column;
@@ -29,12 +28,8 @@ body {
 }
 
 .state circle {
-  /*
-  fill: #18BC9C;
-  fill:#2098d1;
-*/
   stroke: #2098d1;
-  stroke-width: 5px;
+  stroke-width: 3px;
   fill: blue;
   opacity: 0.3;
 }
@@ -113,3 +108,8 @@ label.logo {
   flex-wrap: wrap;
   /* background-color: black; */
 }
+
+
+  
+  
+  

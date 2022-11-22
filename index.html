@@ -14,9 +14,10 @@
 
   <body>
     <nav>
-      <p>Analysis of surface adsorption of different structures against multiple
-        adsorbates</p>
-      
+      <p>
+        Analysis of surface adsorption of different structures against multiple
+        adsorbates
+      </p>
     </nav>
     <div class="box-wrapper">
       <div id="parallelPlots">
@@ -27,13 +28,19 @@
       <div class="support-viz">
         <div id="periodicTable">
           <h5>Periodic Table</h5>
-          periodic table viz is still under development
-          <img
-            src="img/PeriodicTable.png"
-            alt="Periodic Table"
-            width="80%"
-            height="80%"
-          />
+          <svg id='periodic' width="580" height="320"></svg>
+          <script id="grid" type="text/plain">
+            H                                                  He
+            Li Be                               B  C  N  O  F  Ne
+            Na Mg                               Al Si P  S  CI Ar
+            K  Ca Sc Ti V  Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr
+            Rb Sr Y  Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I  Xe
+            Cs Ba :: Hf Ta W  Re Os lr Pt Au Hg Ti Pb Bi Po At Rn
+            Fr Ra :: Rf Db Sg Bh Hs Mt Ds Rg Cn Nh FI Mc Lv Ts Og
+
+                  La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu
+                  Ac Th Pa U  Np Pu Am Cm Bk Cf Es Fm Md No Lr
+          </script>
         </div>
         <div id="3dPlot">
           <h5>Miller Visualization</h5>

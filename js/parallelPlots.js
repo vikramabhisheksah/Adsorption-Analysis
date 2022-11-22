@@ -2,7 +2,7 @@ var data = [],
   currdata = [];
 const bounds = {};
 var brushFlag = 0;
-const svgWidth = 800,
+const svgWidth = 700,
   svgHeight = 500;
 
 var margin = { top: 80, right: 30, bottom: 80, left: 30 },
@@ -26,7 +26,7 @@ const createParallelPlot = () => {
     y[adsorbate] = d3.scaleLinear().domain([-10, 10]).range([height, 0]);
   }
 
-  x = d3.scalePoint().range([0, width]).padding(0.25).domain(keys);
+  x = d3.scalePoint().range([0, width]).padding(0.05).domain(keys);
 
   svg
     .selectAll(".adsorbate")
@@ -94,7 +94,7 @@ const createParallelPlot = () => {
     .attr("height", 50);
 
   var dataL = 0;
-  var offset = 160;
+  var offset = 150;
 
   var legend = svgLegned
     .selectAll(".legend")
@@ -141,15 +141,15 @@ const createParallelPlot = () => {
     .append("rect")
     .attr("class", "background")
     .attr("id", (d, i) => "class-" + i)
-    .attr("x", 60)
+    .attr("x", 20)
     .attr("y", 0)
-    .attr("width", 160)
+    .attr("width", 150)
     .attr("height", 50)
     .style("opacity", 0.2);
 
   legend
     .append("rect")
-    .attr("x", 80)
+    .attr("x", 30)
     .attr("y", 20)
     .attr("width", 10)
     .attr("height", 10)
@@ -159,7 +159,7 @@ const createParallelPlot = () => {
 
   legend
     .append("text")
-    .attr("x", 100)
+    .attr("x", 50)
     .attr("y", 30)
     .text(function (d, i) {
       return d;
