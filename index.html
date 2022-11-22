@@ -14,37 +14,43 @@
 
   <body>
     <nav>
-      <label class="logo"
-        >Analysis of surface adsorption of different structures against multiple
-        adsorbates</label
-      >
+      <p>
+        Analysis of surface adsorption of different structures against multiple
+        adsorbates
+      </p>
     </nav>
     <div class="box-wrapper">
       <div id="parallelPlots">
-        <h3>
-          Parallel plot of the adsorbates (Hover over the lines to view the
-          data)
-        </h3>
+        <h5>
+          Parallel plot of the adsorbates(drag over the vertical axes to use the brushing filter )
+        </h5>
       </div>
       <div class="support-viz">
-        <div id="3dPlot">
-          <h3>Miller Visualization</h3>
-          <div class="plots"></div>
-        </div>
         <div id="periodicTable">
-          <h3>Periodic Table</h3>
-          periodic table viz is still under development
-          <img
-            src="img/PeriodicTable.png"
-            alt="Periodic Table"
-            width="100%"
-            height="100%"
-          />
+          <h5>Periodic Table</h5>
+          <svg id='periodic' width="580" height="320"></svg>
+          <script id="grid" type="text/plain">
+            H                                                  He
+            Li Be                               B  C  N  O  F  Ne
+            Na Mg                               Al Si P  S  CI Ar
+            K  Ca Sc Ti V  Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr
+            Rb Sr Y  Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I  Xe
+            Cs Ba :: Hf Ta W  Re Os lr Pt Au Hg Ti Pb Bi Po At Rn
+            Fr Ra :: Rf Db Sg Bh Hs Mt Ds Rg Cn Nh FI Mc Lv Ts Og
+
+                  La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu
+                  Ac Th Pa U  Np Pu Am Cm Bk Cf Es Fm Md No Lr
+          </script>
+        </div>
+        <div id="3dPlot">
+          <h5>Miller Visualization</h5>
+          <div class="plots"></div>
         </div>
       </div>
     </div>
-    <script src="js/parallelPlots.js"></script>
+    
     <script src="js/millerPlanes.js"></script>
     <script src="js/periodicTable.js"></script>
+    <script src="js/parallelPlots.js"></script>
   </body>
 </html>
