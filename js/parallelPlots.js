@@ -2,8 +2,8 @@ var data = [],
   currdata = [];
 const bounds = {};
 var brushFlag = 0;
-const svgWidth = 1000,
-  svgHeight = 600;
+const svgWidth = 800,
+  svgHeight = 500;
 
 var margin = { top: 80, right: 30, bottom: 80, left: 30 },
   width = svgWidth - margin.left - margin.right,
@@ -70,8 +70,8 @@ const createParallelPlot = () => {
 
   const classKeys = [
     "Single Metals",
-    "Binary metals",
-    "Ternary Plus Metals(3+)",
+    "Binary Metals",
+    "Ternary Metals(3+)",
     "Non Metals",
   ];
 
@@ -90,7 +90,7 @@ const createParallelPlot = () => {
     .attr("height", 50);
 
   var dataL = 0;
-  var offset = 220;
+  var offset = 160;
 
   var legend = svgLegned
     .selectAll(".legend")
@@ -139,7 +139,7 @@ const createParallelPlot = () => {
     .attr("id", (d, i) => "class-" + i)
     .attr("x", 60)
     .attr("y", 0)
-    .attr("width", 200)
+    .attr("width", 160)
     .attr("height", 50)
     .style("opacity", 0.2);
 
