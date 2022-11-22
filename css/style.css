@@ -53,3 +53,23 @@ div.tooltip {
     border-radius: 8px;
     pointer-events: none;
 }
+
+.background path {
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
+  opacity: 0.5;
+  stroke-width: 0.5px;
+}
+
+.foreground path {
+  fill: none;
+  opacity: 0.5;
+  stroke-width: 0.5px;
+}
+
+.brush .selection {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}

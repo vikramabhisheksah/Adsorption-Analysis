@@ -1,22 +1,23 @@
-var data = [];
+var data = [],
+  currdata = [];
 const bounds = {};
 
 const svgWidth = 1000,
   svgHeight = 600;
 
+var margin = { top: 80, right: 30, bottom: 80, left: 30 },
+  width = svgWidth - margin.left - margin.right,
+  height = svgHeight - margin.top - margin.bottom;
+
+var svg = d3
+  .select("#parallelPlots")
+  .append("svg")
+  .attr("width", svgWidth)
+  .attr("height", svgHeight)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 const createParallelPlot = () => {
-  var margin = { top: 80, right: 30, bottom: 80, left: 30 },
-    width = svgWidth - margin.left - margin.right,
-    height = svgHeight - margin.top - margin.bottom;
-
-  var svg = d3
-    .select("#parallelPlots")
-    .append("svg")
-    .attr("width", svgWidth)
-    .attr("height", svgHeight)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
   var keys = ["*OH", "*H", "*N", "*O"];
 
   const y = {};
@@ -107,13 +108,44 @@ const createParallelPlot = () => {
         dataL += d.length + offset;
         return "translate(" + newdataL + ",0)";
       }
-    })
-    .attr("id", (d, i) => "class-" + i);
+    });
+
+  legend.on("click", function (d, structClass) {
+    let i = classKeys.indexOf(structClass);
+    if (!d3.select(this).classed("selected")) {
+      d3.selectAll(".legends4").classed("selected", false);
+      d3.select(this).classed("selected", true);
+
+      legend.selectAll(".background").style("fill", "none");
+      d3.selectAll("rect[id='class-" + i + "']").style("fill", "grey");
+
+      currdata = data.filter((e) => e.class == i);
+      createPath();
+      console.log(data.length);
+      console.log(currdata.length);
+    } else {
+      d3.selectAll(".legends4").classed("selected", false);
+      legend.selectAll(".background").style("fill", "none");
+      currdata = data;
+      createPath();
+    }
+  });
+
+  legend
+    .append("rect")
+    .attr("class", "background")
+    .attr("id", (d, i) => "class-" + i)
+    .attr("x", 60)
+    .attr("y", 0)
+    .attr("width", 200)
+    .attr("height", 50)
+    .style("fill", "none")
+    .style("opacity", 0.2);
 
   legend
     .append("rect")
     .attr("x", 80)
-    .attr("y", 0)
+    .attr("y", 20)
     .attr("width", 10)
     .attr("height", 10)
     .style("fill", function (d, i) {
@@ -123,11 +155,10 @@ const createParallelPlot = () => {
   legend
     .append("text")
     .attr("x", 100)
-    .attr("y", 10)
+    .attr("y", 30)
     .text(function (d, i) {
       return d;
     })
-    .attr("class", "textselected")
     .style("text-anchor", "start")
     .style("font-size", 15);
 
@@ -181,21 +212,168 @@ const createParallelPlot = () => {
   };
 
   //Adding the individual paths to the visualization
-  svg
+  const createPath = () => {
+    svg
+      .append("g")
+      .selectAll("path")
+      .data(currdata)
+      .enter()
+      .append("path")
+      .attr("d", (d) => line(d))
+      .style("fill", "none")
+  
+      
+  };
+
+  const background = svg
     .append("g")
+    .attr("class", "background")
     .selectAll("path")
     .data(data)
     .enter()
     .append("path")
-    .attr("d", (d) => line(d))
+    .attr("d", line)
+    .style("fill", "none");
+    
+
+  // Add blue foreground lines for focus.
+  const foreground = svg
+    .append("g")
+    .attr("class", "foreground")
+    .selectAll("path")
+    .data(currdata)
+    .enter()
+    .append("path")
+    .attr("d", line)
     .style("fill", "none")
     .style("stroke", (d) => colorParallelPlot(d.class))
-    .style("opacity", 0.5)
-    .attr("stroke-width", "0.5px")
     .on("mouseover", mouseover)
-    .on("mousemove", mousemove)
-    .on("mouseleave", mouseleave);
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave);;
+
+  var dragging = {};
+  var g = svg
+    .selectAll(".dimension")
+    .data(keys)
+    .enter()
+    .append("g")
+    .attr("class", "dimension")
+    .attr("transform", function (d) {
+      return "translate(" + x(d) + ")";
+    })
+    .call(
+      d3
+        .drag()
+        .on("start", function (d) {
+          dragging[d] = x(d);
+          background.attr("visibility", "hidden");
+        })
+        .on("drag", function (d) {
+          dragging[d] = Math.min(width, Math.max(0, d3.event.x));
+          foreground.attr("d", line);
+          dimensions.sort(function (a, b) {
+            return position(a) - position(b);
+          });
+          x.domain(keys);
+          g.attr("transform", function (d) {
+            return "translate(" + position(d) + ")";
+          });
+        })
+        .on("end", function (d) {
+          delete dragging[d];
+          transition(d3.select(this)).attr(
+            "transform",
+            "translate(" + x(d) + ")"
+          );
+          transition(foreground).attr("d", line);
+          background
+            .attr("d", line)
+            .transition()
+            .delay(500)
+            .duration(0)
+            .attr("visibility", null);
+        })
+    );
+
+  g.append("g")
+    .attr("class", "brush")
+    .each(function (d) {
+      d3.select(this).call(
+        (y[d].brush = d3
+          .brushY()
+          .extent([
+            [-10, 0],
+            [10, height],
+          ])
+          .on("start", brushstart)
+          .on("brush", brush)
+          .on("end", brush))
+      );
+    })
+    .selectAll("rect")
+    .attr("x", -8)
+    .attr("width", 16);
+
+  // createPath();
+
+
+function position(d) {
+  var v = dragging[d];
+  return v == null ? x(d) : v;
+}
+
+function transition(g) {
+  return g.transition().duration(500);
+}
+
+function brushstart(e) {
+  e.sourceEvent.stopPropagation();
+}
+
+// Handles a brush event, toggling the display of foreground lines.
+function brush() {
+  // Get a set of dimensions with active brushes and their current extent.
+  var actives = [];
+  svg
+    .selectAll(".brush")
+    .filter(function (d) {
+      return d3.brushSelection(this);
+    })
+    .each(function (keys) {
+      actives.push({
+        dimension: keys,
+        extent: d3.brushSelection(this),
+      });
+    });
+  // Change line visibility based on brush extent.
+  if (actives.length === 0) {
+    foreground.style("display", null);
+  } else {
+    foreground.style("display", function (d) {
+      return actives.every(function (brushObj) {
+        var val;
+        p = brushObj.dimension
+        if (p == "*H") {
+          val = d.energy_h;
+        } else if (p == "*N") {
+          val = d.energy_n;
+        } else if (p == "*O") {
+          val = d.energy_o;
+        } else {
+          val = d.energy_oh;
+        }
+        return (
+          brushObj.extent[0] <= y[brushObj.dimension](val) &&
+          y[brushObj.dimension](val) <= brushObj.extent[1]
+        );
+      })
+        ? null
+        : "none";
+    });
+  }
+}
 };
+
 
 const loadData = (file) => {
   // read the csv file
@@ -226,6 +404,7 @@ const loadData = (file) => {
       });
     });
 
+    currdata = data;
     createParallelPlot();
   });
 };
