@@ -73,3 +73,11 @@ div.tooltip {
   stroke: #fff;
   shape-rendering: crispEdges;
 }
+
+.background {
+  fill:none;
+}
+
+.selected .background {
+  fill: grey;
+}
