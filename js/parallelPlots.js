@@ -129,11 +129,7 @@ const createParallelPlot = () => {
       brushedPaths.style("display", (d) => (d.class === i ? null : "none"));
     } else {
       d3.selectAll(".legends4").classed("selected", false);
-      // if (!brushFlag) {
-      //   foreground.style("display", null);
-      // } else {
-        brushedPaths.style("display", "inline");
-      // }
+      brushedPaths.style("display", "inline");
     }
   });
 
