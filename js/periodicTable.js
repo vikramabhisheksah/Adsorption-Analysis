@@ -57,7 +57,7 @@ var div_tooltip = d3
   .select("#periodicTable")
   .append("div")
   .attr("class", "tooltip")
-  .style("opacity", 0)  
+  .style("opacity", 0)
   .style("padding", "5px")
   .style("position", "absolute")
   .style("text-overflow", "ellipsis")
@@ -83,12 +83,11 @@ state
   .on("mouseover", function (e, item) {
     div_tooltip.transition().duration(200).style("opacity", 0.9);
     div_tooltip
-      .html( item.name)
+      .html(item.name)
       .style("left", e.pageX + "px")
-      .style("top", e.pageY +20+ "px");
+      .style("top", e.pageY + 20 + "px");
 
     d3.select("#txt").selectAll("text").remove();
-
   })
   .on("mouseout", function (d) {
     div_tooltip.transition().duration(100).style("opacity", 0);
@@ -104,12 +103,12 @@ state
   .on("click", function (d, item) {
     if (clicked.has(item.name)) {
       clicked.delete(item.name);
-      d3.select(this.parentNode).select('circle').style("fill", "blue");
+      d3.select(this.parentNode).select("circle").style("fill", "blue");
     } else {
       clicked.add(item.name);
-      d3.select(this.parentNode).select('circle').style("fill", "red");
+      d3.select(this.parentNode).select("circle").style("fill", "red");
     }
-    console.log(clicked.values())
+    console.log(clicked.values());
     // filterFromPeriodic();
   })
 

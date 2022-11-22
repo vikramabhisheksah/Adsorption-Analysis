@@ -207,7 +207,7 @@ const createParallelPlot = () => {
         "<br/>" +
         "shift:&#09;" +
         d.target.__data__.shift +
-        "<br/>" 
+        "<br/>"
     )
       .style("left", d.pageX + 70 + "px")
       .style("top", d.pageY + "px");

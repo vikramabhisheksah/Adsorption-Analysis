@@ -12,7 +12,7 @@ const plotItem = (x, y, z) => {
 
   const camera = new THREE.PerspectiveCamera(
     45,
-    window.innerWidth/ window.innerHeight,
+    window.innerWidth / window.innerHeight,
     0.1,
     1000
   );
@@ -22,11 +22,12 @@ const plotItem = (x, y, z) => {
     canvas: canvas,
   });
 
-  var tooltip = d3.select("#my_dataviz")
-  .append("div")
+  var tooltip = d3
+    .select("#my_dataviz")
+    .append("div")
     .style("position", "absolute")
     .style("visibility", "hidden")
-    .text(x,y,z);
+    .text(x, y, z);
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
 
