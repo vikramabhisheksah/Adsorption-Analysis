@@ -117,7 +117,7 @@ plotItem(0, -1, 1);
 plotItem(0, 1, -1);
 plotItem(-1, 1, 1);
 plotItem(1, 1, -1);
-plotItem(1, -1, 1);
+
 
 document.querySelectorAll("div.plots > canvas").forEach((item, ind) => {
   item.addEventListener("click", () => {

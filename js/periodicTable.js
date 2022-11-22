@@ -15,7 +15,6 @@ d3.select("#grid")
       });
     }
   });
-console.log(states);
 
 var p_svg = d3.select("#periodic"),
   p_width = +p_svg.attr("width"),
@@ -30,8 +29,6 @@ var gridWidth =
       return d.y;
     }) + 1,
   cellSize = 30;
-console.log(gridHeight);
-console.log(gridWidth);
 
 var state = p_svg
   .append("g")
@@ -56,11 +53,17 @@ var state = p_svg
     );
   });
 
-var div = d3
-  .select("periodicTable")
+var div_tooltip = d3
+  .select("#periodicTable")
   .append("div")
   .attr("class", "tooltip")
-  .style("opacity", 0);
+  .style("opacity", 0)  
+  .style("padding", "5px")
+  .style("position", "absolute")
+  .style("text-overflow", "ellipsis")
+  .style("white-space", "pre")
+  .style("line-height", "2em")
+  .style("z-index", "300");
 
 state
   .append("circle")
@@ -68,36 +71,27 @@ state
   .attr("cy", 1)
   .attr("r", 15)
   .on("click", function (d, item) {
-    if (clicked.has(item)) {
-      clicked.delete(item);
+    if (clicked.has(item.name)) {
+      clicked.delete(item.name);
       d3.select(this).style("fill", "blue");
     } else {
-      clicked.add(item);
+      clicked.add(item.name);
       d3.select(this).style("fill", "red");
     }
-    console.log(clicked.values());
+    // filterFromPeriodic();
   })
   .on("mouseover", function (e, item) {
-    console.log(e);
-    div.transition().duration(200).style("opacity", 0.9);
-
-    div
-      .html(item.name)
+    div_tooltip.transition().duration(200).style("opacity", 0.9);
+    div_tooltip
+      .html( item.name)
       .style("left", e.pageX + "px")
-      .style("top", e.pageY - 28 + "px");
+      .style("top", e.pageY +20+ "px");
 
     d3.select("#txt").selectAll("text").remove();
 
-    d3.select("#txt")
-      .append("text")
-      .attr("font-size", "2em")
-      .attr("color", "black")
-      .text(function (d) {
-        return "Selected:" + Array.from(clicked);
-      });
   })
   .on("mouseout", function (d) {
-    div.transition().duration(100).style("opacity", 0);
+    div_tooltip.transition().duration(100).style("opacity", 0);
   });
 
 state
@@ -108,16 +102,17 @@ state
     return d.name;
   })
   .on("click", function (d, item) {
-    if (clicked.has(item)) {
-      clicked.delete(item);
-      d3.select(this).style("fill", "blue");
+    if (clicked.has(item.name)) {
+      clicked.delete(item.name);
+      d3.select(this.parentNode).select('circle').style("fill", "blue");
     } else {
-      clicked.add(item);
-      d3.select(this).style("fill", "red");
+      clicked.add(item.name);
+      d3.select(this.parentNode).select('circle').style("fill", "red");
     }
-    console.log(clicked.values());
+    console.log(clicked.values())
+    // filterFromPeriodic();
   })
 
   .on("mouseout", function (d) {
-    div.transition().duration(100).style("opacity", 0);
+    div_tooltip.transition().duration(100).style("opacity", 0);
   });
