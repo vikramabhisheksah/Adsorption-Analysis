@@ -102,10 +102,14 @@ label.logo {
 }
 
 .plots {
-  width: 900px;
+  width: 600px;
+  height: 300px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-evenly;
+  
+  
   /* background-color: black; */
 }
 
