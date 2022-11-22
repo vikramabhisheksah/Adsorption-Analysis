@@ -6,13 +6,13 @@ const plotItem = (x, y, z) => {
   const scene = new THREE.Scene();
 
   const sizes = {
-    width: canvas.width,
-    height: canvas.height,
+    width: 180,
+    height: 135,
   };
 
   const camera = new THREE.PerspectiveCamera(
     45,
-    window.innerWidth / window.innerHeight,
+    window.innerWidth/ window.innerHeight,
     0.1,
     1000
   );
@@ -21,6 +21,12 @@ const plotItem = (x, y, z) => {
   const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
   });
+
+  var tooltip = d3.select("#my_dataviz")
+  .append("div")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+    .text(x,y,z);
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -117,7 +123,7 @@ plotItem(0, -1, 1);
 plotItem(0, 1, -1);
 plotItem(-1, 1, 1);
 plotItem(1, 1, -1);
-plotItem(1, -1, 1);
+// plotItem(1, -1, 1);
 
 document.querySelectorAll("div.plots > canvas").forEach((item, ind) => {
   item.addEventListener("click", () => {
