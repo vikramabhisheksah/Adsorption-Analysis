@@ -39,6 +39,10 @@ const createParallelPlot = () => {
     .each(function (d) {
       d3.select(this).call(d3.axisLeft().scale(y[d]));
     })
+    .style("stroke-width", 1)
+    // .on('mouseover', ()=>{
+    //   d3.select('g').style('stroke-width',2)
+    // })
     // Add axis title
     .append("text")
     .style("text-anchor", "left")
@@ -169,15 +173,17 @@ const createParallelPlot = () => {
     .append("div")
     .style("opacity", 0)
     .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px");
+    .style("background", "transparent")
+    .style("padding", "5px")
+    .style("position", "absolute")
+    .style("text-overflow", "ellipsis")
+    .style("white-space", "pre")
+    .style("line-height", "2em")
+    .style("z-index", "300");
 
   //functions for mouseover, mousemove and mouseleave
   var mouseover = function (d) {
-    Tooltip.style("opacity", 0.8);
+    Tooltip.style("opacity", 0.5).style("font-weight", 800);
     d3.select(this)
       .style("stroke", "black")
       .style("opacity", 1)
@@ -186,25 +192,22 @@ const createParallelPlot = () => {
     miller_indices = miller_indices.replace("(", "");
     miller_indices = miller_indices.replace(")", "");
     miller_indices = miller_indices.split(",");
-    //The function is not ready to be used in alpha release
     // drawThreePointTriangle(miller_indices[0],miller_indices[1],miller_indices[2]);
   };
   var mousemove = function (d) {
     Tooltip.html(
-      "bulk mpid:" +
+      "bulk mpid:&#09;" +
         d.target.__data__.bulk_mpid +
         "<br/>" +
-        "bulk symbols:" +
+        "bulk symbols:&#09;" +
         d.target.__data__.bulk_symbols +
         "<br/>" +
-        "miller index:" +
+        "miller index:&#09;" +
         d.target.__data__.miller_index +
         "<br/>" +
-        "shift:" +
+        "shift:&#09;" +
         d.target.__data__.shift +
-        "<br/>" +
-        "top:" +
-        d.target.__data__.top
+        "<br/>" 
     )
       .style("left", d.pageX + 70 + "px")
       .style("top", d.pageY + "px");
@@ -214,7 +217,7 @@ const createParallelPlot = () => {
     Tooltip.style("opacity", 0);
     d3.select(this)
       .style("stroke", (d) => colorParallelPlot(d.class))
-      .style("opacity", 0.5)
+      .style("opacity", 0.3)
       .style("stroke-width", 0.5);
   };
 

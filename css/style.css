@@ -28,11 +28,6 @@ body {
   justify-content: start;
 }
 
-#periodicTable {
-  padding: 10% 0;
-}
-/* ----kushal periodic table---- */
-
 .state circle {
   /*
   fill: #18BC9C;
@@ -70,13 +65,13 @@ div.tooltip {
   fill: none;
   stroke: #ddd;
   shape-rendering: crispEdges;
-  opacity: 0.5;
+  opacity: 0.3;
   stroke-width: 0.5px;
 }
 
 .foreground path {
   fill: none;
-  opacity: 0.5;
+  opacity: 0.3;
   stroke-width: 0.5px;
 }
 
@@ -95,7 +90,6 @@ div.tooltip {
 }
 
 nav {
-  background: #edebeb78;
   width: 100%;
   font-family: Georgia, "Times New Roman", Times, serif;
   display: flex;
