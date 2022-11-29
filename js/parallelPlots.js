@@ -28,30 +28,6 @@ const createParallelPlot = () => {
 
   x = d3.scalePoint().range([0, width]).padding(0.05).domain(keys);
 
-  svg
-    .selectAll(".adsorbate")
-    // For each dimension of the dataset add a 'g' element:\
-    .data(keys)
-    .enter()
-    .append("g")
-    .attr("class", "adsorbate")
-    .attr("transform", (d) => "translate(" + x(d) + ")")
-    .each(function (d) {
-      d3.select(this).call(d3.axisLeft().scale(y[d]));
-    })
-    .style("stroke-width", 1)
-    // .on('mouseover', ()=>{
-    //   d3.select('g').style('stroke-width',2)
-    // })
-    // Add axis title
-    .append("text")
-    .style("text-anchor", "left")
-    .style("font-size", "14px")
-    .attr("y", -20)
-    .text((d) => d)
-    .style("fill", "black")
-    .style("font-weight", "500");
-
   //separate function to create lines
   function line(d) {
     pts = d3.line()(
@@ -322,7 +298,33 @@ const createParallelPlot = () => {
     }
     getBrushedPaths();
   }
+
+  svg
+    .selectAll(".adsorbate")
+    // For each dimension of the dataset add a 'g' element:\
+    .data(keys)
+    .enter()
+    .append("g")
+    .attr("class", "adsorbate")
+    .attr("transform", (d) => "translate(" + x(d) + ")")
+    .each(function (d) {
+      d3.select(this).call(d3.axisLeft().scale(y[d]));
+    })
+    .style("stroke-width", 1)
+    // .on('mouseover', ()=>{
+    //   d3.select('g').style('stroke-width',2)
+    // })
+    // Add axis title
+    .append("text")
+    .style("text-anchor", "left")
+    .style("font-size", "14px")
+    .attr("y", -20)
+    .text((d) => d)
+    .style("fill", "black")
+    .style("font-weight", "500");
+
 };
+
 
 const loadData = (file) => {
   // read the csv file
