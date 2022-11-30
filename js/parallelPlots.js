@@ -90,6 +90,8 @@ const createParallelPlot = () => {
         return "translate(" + newdataL + ",0)";
       }
     });
+   
+    
 
   let brushedPaths;
   const getBrushedPaths = () => {
@@ -123,10 +125,19 @@ const createParallelPlot = () => {
     .attr("y", 0)
     .attr("width", 150)
     .attr("height", 50)
-    .style("opacity", 0.2);
+    .style("opacity", 0.2)
+    .on("mouseover", function(d){
+      d3.select(this).style('border-color','black').style('border-style','solid').style('border-width','5px')
+    })
+    .on("mouseleave", function(d){
+      d3.select(this).style('background','none')
+    });
 
   legend
     .append("rect")
+    .attr('id',function(d,i){
+      return 'color-block'+i
+    })
     .attr("x", 30)
     .attr("y", 20)
     .attr("width", 10)
@@ -134,6 +145,7 @@ const createParallelPlot = () => {
     .style("fill", function (d, i) {
       return colorParallelPlot(i);
     });
+    
 
   legend
     .append("text")
@@ -143,7 +155,17 @@ const createParallelPlot = () => {
       return d;
     })
     .style("text-anchor", "start")
-    .style("font-size", 15);
+    .style("font-size", 15)
+    .on("mouseover", function(d,i){
+      let x = classKeys.indexOf(i)
+      d3.select(this).style('font-size',18)
+      d3.select('#color-block'+x).attr('width', 14).attr('height', 14)
+    })
+    .on("mouseleave", function(d,i){
+      d3.select(this).style('font-size',15)
+      let x = classKeys.indexOf(i)
+      d3.select('#color-block'+x).attr('width', 10).attr('height', 10)
+    });
 
   //generate tooltips
   var Tooltip = d3
@@ -367,15 +389,10 @@ const loadData = (file) => {
 
 const filterFromPeriodic=()=>{
   let clickedArr = Array.from(clicked)
-  // console.log(clickedArr)
   currdata = data.filter((item)=>clickedArr.some((val)=>{
-    // console.log(item.bulk_symbols)
     return (item.bulk_symbols.includes(val))
   }))
-  // console.log(currdata)
-  // if (!foreground){
-  //   createParallelPlot();
-  // }
+
   foreground.style("display", function (d) {
     return clickedArr.some((val)=>{
       return (d.bulk_symbols.includes(val))
@@ -383,7 +400,4 @@ const filterFromPeriodic=()=>{
   })
 }
 
-// const addForeground=()=>{
-
-// }
 loadData("./data/clean_data_vds_new.csv");
