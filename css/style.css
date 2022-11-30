@@ -124,6 +124,7 @@ label.logo {
   visibility: hidden;
   width: 120px;
   background-color: white;
+  opacity:0.7;
   color: black;
   text-align: center;
   padding: 5px 0;
