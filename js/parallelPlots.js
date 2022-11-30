@@ -106,11 +106,18 @@ const createParallelPlot = () => {
     let i = classKeys.indexOf(structClass);
     if (!brushedPaths) {
       getBrushedPaths();
+      // plotMillerIndices(brushedPaths._groups[0].map((i) => i.__data__));
     }
     if (!d3.select(this).classed("selected")) {
       d3.selectAll(".legends4").classed("selected", false);
       d3.select(this).classed("selected", true);
-      brushedPaths.style("display", (d) => (d.class === i ? null : "none"));
+      let selectedpaths=[]
+      brushedPaths.style("display", (d) => {
+        console.log(d)
+        if (d.class===i) selectedpaths.push(d)
+        return d.class === i ? null : "none"
+      });
+      plotMillerIndices(selectedpaths)
     } else {
       d3.selectAll(".legends4").classed("selected", false);
       brushedPaths.style("display", "inline");
@@ -333,6 +340,7 @@ const createParallelPlot = () => {
       });
     }
     getBrushedPaths();
+    plotMillerIndices(brushedPaths._groups[0].map((i) => i.__data__));
   }
 
   svg
