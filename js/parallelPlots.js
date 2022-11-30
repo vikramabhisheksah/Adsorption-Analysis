@@ -212,7 +212,15 @@ const createParallelPlot = () => {
       .style("left", d.pageX + 70 + "px")
       .style("top", d.pageY + "px");
   };
+  var mouseclick = function (d) {
+    currdata = [
+      {
+        miller_index: d.target.__data__.miller_index,
+      },
+    ];
 
+    plotMillerIndices(currdata);
+  };
   var mouseleave = function (d) {
     Tooltip.style("opacity", 0);
     d3.select(this)
@@ -244,6 +252,7 @@ const createParallelPlot = () => {
     .style("stroke", (d) => colorParallelPlot(d.class))
     .on("mouseover", mouseover)
     .on("mousemove", mousemove)
+    .on("click", mouseclick)
     .on("mouseleave", mouseleave);
 
   var g = svg
@@ -392,7 +401,7 @@ const filterFromPeriodic=()=>{
   currdata = data.filter((item)=>clickedArr.some((val)=>{
     return (item.bulk_symbols.includes(val))
   }))
-
+  plotMillerIndices(currdata);
   foreground.style("display", function (d) {
     return clickedArr.some((val)=>{
       return (d.bulk_symbols.includes(val))

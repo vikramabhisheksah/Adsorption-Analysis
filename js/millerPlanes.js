@@ -1,7 +1,22 @@
+var selectedMillerIndices = null;
+
 const plotItem = (x, y, z) => {
   const canvas = document.createElement("canvas");
+  const tooltipContainer = document.createElement("div");
+  tooltipContainer.classList.add("tooltip2");
+  const tooltipText = document.createElement("span");
+  tooltipText.classList.add("tooltiptext");
+  tooltipText.innerHTML = `x: ${x}; y: ${y}, z: ${z}`;
   const plots = document.querySelector("div.plots");
-  plots.appendChild(canvas);
+
+  tooltipContainer.appendChild(canvas);
+  tooltipContainer.appendChild(tooltipText);
+
+  plots.appendChild(tooltipContainer);
+
+  canvas.onclick = function () {
+    selectedMillerIndices = { x, y, z };
+  };
 
   const scene = new THREE.Scene();
 
@@ -61,8 +76,8 @@ const plotItem = (x, y, z) => {
 
     function createPolygon(vertices) {
       var v3 = vertices.map(([x, y, z]) => {
-        if (x === y && y === z) {
-          return new THREE.Vector3(x + 0.00000001, y, z);
+        if (x === y && z === x) {
+          return new THREE.Vector3(x + 0.0001, y - 0.0001, z);
         } else {
           return new THREE.Vector3(x, y, z);
         }
@@ -118,13 +133,44 @@ const plotItem = (x, y, z) => {
   animate();
 };
 
-plotItem(1, 1, 1);
-plotItem(0, 1, 1);
-plotItem(0, -1, 1);
-plotItem(0, 1, -1);
-plotItem(-1, 1, 1);
-plotItem(1, 1, -1);
-// plotItem(1, -1, 1);
+function parseTuple(tuple) {
+  tuple = tuple.replace("(", "").replace(")", "");
+
+  return tuple.split(",").map((i) => parseFloat(i));
+}
+
+const plotMillerIndices = async (millerData) => {
+  document.querySelector("div.plots").innerHTML = "";
+  THREE.Cache.clear();
+
+  let millerIndices = millerData.map((i) => i.miller_index);
+
+  millerIndices = [...new Set(millerIndices)].slice(0, 15);
+
+  for (let data of millerIndices) {
+    plotItem(...parseTuple(data));
+  }
+};
+
+// document.addEventListener("mousedown", () => plotMillerIndices());
+
+document.querySelector("span.total-plots").innerHTML = millerIndices?.length;
+
+function nextPage() {
+  let activePage = parseFloat(
+    document.querySelector("span.page-number").innerHTML
+  );
+  document.querySelector("span.page-number").innerHTML = activePage + 1;
+  plotMillerIndices();
+}
+
+function prevPage() {
+  let activePage = parseFloat(
+    document.querySelector("span.page-number").innerHTML
+  );
+  document.querySelector("span.page-number").innerHTML = activePage - 1;
+  plotMillerIndices();
+}
 
 document.querySelectorAll("div.plots > canvas").forEach((item, ind) => {
   item.addEventListener("click", () => {

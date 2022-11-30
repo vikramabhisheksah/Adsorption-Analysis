@@ -44,16 +44,16 @@ body {
 }
 
 div.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 60px;
-    height: 28px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
 }
 
 .background path {
@@ -71,13 +71,13 @@ div.tooltip {
 }
 
 .brush .selection {
-  fill-opacity: .3;
+  fill-opacity: 0.3;
   stroke: #fff;
   shape-rendering: crispEdges;
 }
 
 .background {
-  fill:none;
+  fill: none;
 }
 
 .selected .background {
@@ -108,12 +108,34 @@ label.logo {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  
-  
+  overflow-y: scroll;
+
   /* background-color: black; */
 }
 
+.tooltip2 {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
 
-  
-  
-  
+/* Tooltip text */
+.tooltip2 .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: white;
+  color: black;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  left: 0px;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip2:hover .tooltiptext {
+  visibility: visible;
+}
