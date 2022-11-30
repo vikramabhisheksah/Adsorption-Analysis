@@ -4,6 +4,8 @@ const bounds = {};
 var brushFlag = 0;
 const svgWidth = 700,
   svgHeight = 500;
+var clicked = new Set();
+let background=null, foreground=null;
 
 var margin = { top: 80, right: 30, bottom: 80, left: 30 },
   width = svgWidth - margin.left - margin.right,
@@ -197,7 +199,7 @@ const createParallelPlot = () => {
       .style("stroke-width", 0.5);
   };
 
-  const background = svg
+   background = svg
     .append("g")
     .attr("class", "background")
     .selectAll("path")
@@ -208,7 +210,7 @@ const createParallelPlot = () => {
     .style("fill", "none");
 
   // Add blue foreground lines for focus.
-  const foreground = svg
+   foreground = svg
     .append("g")
     .attr("class", "foreground")
     .selectAll("path")
@@ -275,6 +277,7 @@ const createParallelPlot = () => {
       foreground.style("display", null);
     } else {
       foreground.style("display", function (d) {
+        let clickedArr = Array.from(clicked)
         return actives.every(function (brushObj) {
           var val;
           p = brushObj.dimension;
@@ -290,7 +293,9 @@ const createParallelPlot = () => {
           return (
             brushObj.extent[0] <= y[brushObj.dimension](val) &&
             y[brushObj.dimension](val) <= brushObj.extent[1]
-          );
+          )
+        }) && clickedArr.some((val)=>{
+          return (d.bulk_symbols.includes(val))
         })
           ? null
           : "none";
@@ -359,4 +364,26 @@ const loadData = (file) => {
     createParallelPlot();
   });
 };
+
+const filterFromPeriodic=()=>{
+  let clickedArr = Array.from(clicked)
+  // console.log(clickedArr)
+  currdata = data.filter((item)=>clickedArr.some((val)=>{
+    // console.log(item.bulk_symbols)
+    return (item.bulk_symbols.includes(val))
+  }))
+  // console.log(currdata)
+  // if (!foreground){
+  //   createParallelPlot();
+  // }
+  foreground.style("display", function (d) {
+    return clickedArr.some((val)=>{
+      return (d.bulk_symbols.includes(val))
+    })? null:'none'
+  })
+}
+
+// const addForeground=()=>{
+
+// }
 loadData("./data/clean_data_vds_new.csv");

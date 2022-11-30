@@ -1,5 +1,4 @@
 var states = [];
-var clicked = new Set();
 
 d3.select("#grid")
   .text()
@@ -78,7 +77,7 @@ state
       clicked.add(item.name);
       d3.select(this).style("fill", "red");
     }
-    // filterFromPeriodic();
+    filterFromPeriodic();
   })
   .on("mouseover", function (e, item) {
     div_tooltip.transition().duration(200).style("opacity", 0.9);
@@ -108,8 +107,7 @@ state
       clicked.add(item.name);
       d3.select(this.parentNode).select("circle").style("fill", "red");
     }
-    console.log(clicked.values());
-    // filterFromPeriodic();
+    filterFromPeriodic();
   })
 
   .on("mouseout", function (d) {
