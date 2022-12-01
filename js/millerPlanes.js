@@ -74,7 +74,7 @@ const plotItem = (x, y, z) => {
       p3 /= min;
     }
 
-    function createPolygon(vertices) {
+    function createTriangle(vertices) {
       var v3 = vertices.map(([x, y, z]) => {
         if (x === y && z === x) {
           return new THREE.Vector3(x + 0.0001, y - 0.0001, z);
@@ -84,8 +84,11 @@ const plotItem = (x, y, z) => {
       });
 
       var holes = [];
+
       var triangles, mesh;
+
       var geometry = new THREE.Geometry();
+
       var material = new THREE.MeshBasicMaterial({
         color: 0xffffff,
         opacity: 0.4,
@@ -95,6 +98,11 @@ const plotItem = (x, y, z) => {
       geometry.vertices = v3;
 
       triangles = THREE.ShapeUtils.triangulateShape(v3, holes);
+
+      if (triangles.length === 0) {
+        geometry.faces.push(new THREE.Face3(0, 1, 2));
+        geometry.faces.push(new THREE.Face3(2, 1, 0));
+      }
 
       for (var i = 0; i < triangles.length; i++) {
         geometry.faces.push(
@@ -110,13 +118,61 @@ const plotItem = (x, y, z) => {
       return mesh;
     }
 
-    scene.add(
-      createPolygon([
-        [p1, 0, 0],
-        [0, p2, 0],
-        [0, 0, p3],
-      ])
-    );
+    if (p1 === p2 && p1 === 0) {
+      scene.add(
+        createTriangle([
+          [0, 0, p3],
+          [p3, 0, p3],
+          [0, p3, p3],
+        ])
+      );
+      scene.add(
+        createTriangle([
+          [p3, p3, p3],
+          [p3, 0, p3],
+          [0, p3, p3],
+        ])
+      );
+    } else if (p1 === p3 && p1 === 0) {
+      scene.add(
+        createTriangle([
+          [0, p2, 0],
+          [p2, p2, 0],
+          [0, p2, p2],
+        ])
+      );
+      scene.add(
+        createTriangle([
+          [p2, p2, p2],
+          [p2, p2, 0],
+          [0, p2, p2],
+        ])
+      );
+    } else if (p2 === p3 && p2 === 0) {
+      scene.add(
+        createTriangle([
+          [p1, 0, 0],
+          [p1, p1, 0],
+          [p1, 0, p1],
+        ])
+      );
+
+      scene.add(
+        createTriangle([
+          [p1, p1, p1],
+          [p1, p1, 0],
+          [p1, 0, p1],
+        ])
+      );
+    } else {
+      scene.add(
+        createTriangle([
+          [p1, 0, 0],
+          [0, p2, 0],
+          [0, 0, p3],
+        ])
+      );
+    }
   }
 
   drawThreePointTriangle(x, y, z);
@@ -151,10 +207,6 @@ const plotMillerIndices = async (millerData) => {
     plotItem(...parseTuple(data));
   }
 };
-
-// document.addEventListener("mousedown", () => plotMillerIndices());
-
-document.querySelector("span.total-plots").innerHTML = millerIndices?.length;
 
 function nextPage() {
   let activePage = parseFloat(
