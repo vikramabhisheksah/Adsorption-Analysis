@@ -180,13 +180,15 @@ const createParallelPlot = () => {
     .append("div")
     .style("opacity", 0)
     .attr("class", "tooltip")
-    .style("background", "transparent")
+    .style("background", "white")
     .style("padding", "5px")
     .style("position", "absolute")
     .style("text-overflow", "ellipsis")
     .style("white-space", "pre")
     .style("line-height", "2em")
-    .style("z-index", "300");
+    .style("z-index", "300")
+    .style('height','120px')
+    .style('width','200px');
 
   //functions for mouseover, mousemove and mouseleave
   var mouseover = function (d) {
