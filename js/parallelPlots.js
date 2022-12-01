@@ -187,7 +187,7 @@ const createParallelPlot = () => {
     .style("white-space", "pre")
     .style("line-height", "2em")
     .style("z-index", "300")
-    .style('height','300px')
+    .style('height','120px')
     .style('width','200px');
 
   //functions for mouseover, mousemove and mouseleave

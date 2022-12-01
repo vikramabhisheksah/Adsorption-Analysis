@@ -140,3 +140,7 @@ label.logo {
 .tooltip2:hover .tooltiptext {
   visibility: visible;
 }
+
+#parallelPlots{
+  padding-left: 5px;
+}
