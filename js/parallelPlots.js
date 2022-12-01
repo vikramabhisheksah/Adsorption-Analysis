@@ -61,7 +61,7 @@ const createParallelPlot = () => {
   var colorParallelPlot = d3
     .scaleOrdinal()
     .domain([0, 1, 2, 3])
-    .range(["#ff005d", "#DDFF00", "#00FFA2", "#2200FF"]);
+    .range(["#ff005d", "#00916E", "#3F7CAC", "#FFCF00"]);
 
   var svgLegned = d3
     .select("#parallelPlots")
@@ -260,7 +260,8 @@ const createParallelPlot = () => {
     .on("mouseover", mouseover)
     .on("mousemove", mousemove)
     .on("click", mouseclick)
-    .on("mouseleave", mouseleave);
+    .on("mouseleave", mouseleave)
+    .style('display','none');
 
   var g = svg
     .selectAll(".dimension")
@@ -350,15 +351,22 @@ const createParallelPlot = () => {
     .enter()
     .append("g")
     .attr("class", "adsorbate")
+    .attr('id',function(d){
+      return 'adsorbate-'+keys.indexOf(d)
+    })
     .attr("transform", (d) => "translate(" + x(d) + ")")
     .each(function (d) {
       d3.select(this).call(d3.axisLeft().scale(y[d]));
     })
     .style("stroke-width", 1)
-    // .on('mouseover', ()=>{
-    //   d3.select('g').style('stroke-width',2)
-    // })
-    // Add axis title
+    .on('mouseover', (d,i)=>{
+      var k = keys.indexOf(i)
+      d3.select('#adsorbate-'+k).style('stroke-width',3)
+    })
+    .on('mouseleave', (d,i)=>{
+      var k = keys.indexOf(i)
+      d3.select('#adsorbate-'+k).style('stroke-width',1)
+    })
     .append("text")
     .style("text-anchor", "left")
     .style("font-size", "14px")

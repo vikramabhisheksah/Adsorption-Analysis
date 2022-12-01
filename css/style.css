@@ -30,7 +30,7 @@ body {
 .state circle {
   stroke: #2098d1;
   stroke-width: 3px;
-  fill: blue;
+  /* fill: blue; */
   opacity: 0.3;
 }
 
