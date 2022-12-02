@@ -5,7 +5,8 @@ var brushFlag = 0;
 const svgWidth = 700,
   svgHeight = 500;
 var clicked = new Set();
-let background=null, foreground=null;
+let background = null,
+  foreground = null;
 
 var margin = { top: 80, right: 30, bottom: 80, left: 30 },
   width = svgWidth - margin.left - margin.right,
@@ -90,8 +91,6 @@ const createParallelPlot = () => {
         return "translate(" + newdataL + ",0)";
       }
     });
-   
-    
 
   let brushedPaths;
   const getBrushedPaths = () => {
@@ -111,13 +110,13 @@ const createParallelPlot = () => {
     if (!d3.select(this).classed("selected")) {
       d3.selectAll(".legends4").classed("selected", false);
       d3.select(this).classed("selected", true);
-      let selectedpaths=[]
+      let selectedpaths = [];
       brushedPaths.style("display", (d) => {
-        console.log(d)
-        if (d.class===i) selectedpaths.push(d)
-        return d.class === i ? null : "none"
+        console.log(d);
+        if (d.class === i) selectedpaths.push(d);
+        return d.class === i ? null : "none";
       });
-      plotMillerIndices(selectedpaths)
+      plotMillerIndices(selectedpaths);
     } else {
       d3.selectAll(".legends4").classed("selected", false);
       brushedPaths.style("display", "inline");
@@ -133,17 +132,20 @@ const createParallelPlot = () => {
     .attr("width", 150)
     .attr("height", 50)
     .style("opacity", 0.2)
-    .on("mouseover", function(d){
-      d3.select(this).style('border-color','black').style('border-style','solid').style('border-width','5px')
+    .on("mouseover", function (d) {
+      d3.select(this)
+        .style("border-color", "black")
+        .style("border-style", "solid")
+        .style("border-width", "5px");
     })
-    .on("mouseleave", function(d){
-      d3.select(this).style('background','none')
+    .on("mouseleave", function (d) {
+      d3.select(this).style("background", "none");
     });
 
   legend
     .append("rect")
-    .attr('id',function(d,i){
-      return 'color-block'+i
+    .attr("id", function (d, i) {
+      return "color-block" + i;
     })
     .attr("x", 30)
     .attr("y", 20)
@@ -152,7 +154,6 @@ const createParallelPlot = () => {
     .style("fill", function (d, i) {
       return colorParallelPlot(i);
     });
-    
 
   legend
     .append("text")
@@ -163,15 +164,19 @@ const createParallelPlot = () => {
     })
     .style("text-anchor", "start")
     .style("font-size", 15)
-    .on("mouseover", function(d,i){
-      let x = classKeys.indexOf(i)
-      d3.select(this).style('font-size',18)
-      d3.select('#color-block'+x).attr('width', 14).attr('height', 14)
+    .on("mouseover", function (d, i) {
+      let x = classKeys.indexOf(i);
+      d3.select(this).style("font-size", 18);
+      d3.select("#color-block" + x)
+        .attr("width", 14)
+        .attr("height", 14);
     })
-    .on("mouseleave", function(d,i){
-      d3.select(this).style('font-size',15)
-      let x = classKeys.indexOf(i)
-      d3.select('#color-block'+x).attr('width', 10).attr('height', 10)
+    .on("mouseleave", function (d, i) {
+      d3.select(this).style("font-size", 15);
+      let x = classKeys.indexOf(i);
+      d3.select("#color-block" + x)
+        .attr("width", 10)
+        .attr("height", 10);
     });
 
   //generate tooltips
@@ -187,8 +192,8 @@ const createParallelPlot = () => {
     .style("white-space", "pre")
     .style("line-height", "2em")
     .style("z-index", "300")
-    .style('height','120px')
-    .style('width','200px');
+    .style("height", "120px")
+    .style("width", "200px");
 
   //functions for mouseover, mousemove and mouseleave
   var mouseover = function (d) {
@@ -238,7 +243,7 @@ const createParallelPlot = () => {
       .style("stroke-width", 0.5);
   };
 
-   background = svg
+  background = svg
     .append("g")
     .attr("class", "background")
     .selectAll("path")
@@ -249,7 +254,7 @@ const createParallelPlot = () => {
     .style("fill", "none");
 
   // Add blue foreground lines for focus.
-   foreground = svg
+  foreground = svg
     .append("g")
     .attr("class", "foreground")
     .selectAll("path")
@@ -263,7 +268,7 @@ const createParallelPlot = () => {
     .on("mousemove", mousemove)
     .on("click", mouseclick)
     .on("mouseleave", mouseleave)
-    .style('display','none');
+    .style("display", "none");
 
   var g = svg
     .selectAll(".dimension")
@@ -318,7 +323,7 @@ const createParallelPlot = () => {
       foreground.style("display", null);
     } else {
       foreground.style("display", function (d) {
-        let clickedArr = Array.from(clicked)
+        let clickedArr = Array.from(clicked);
         return actives.every(function (brushObj) {
           var val;
           p = brushObj.dimension;
@@ -334,10 +339,11 @@ const createParallelPlot = () => {
           return (
             brushObj.extent[0] <= y[brushObj.dimension](val) &&
             y[brushObj.dimension](val) <= brushObj.extent[1]
-          )
-        }) && clickedArr.some((val)=>{
-          return (d.bulk_symbols.includes(val))
-        })
+          );
+        }) &&
+          clickedArr.some((val) => {
+            return d.bulk_symbols.includes(val);
+          })
           ? null
           : "none";
       });
@@ -353,21 +359,21 @@ const createParallelPlot = () => {
     .enter()
     .append("g")
     .attr("class", "adsorbate")
-    .attr('id',function(d){
-      return 'adsorbate-'+keys.indexOf(d)
+    .attr("id", function (d) {
+      return "adsorbate-" + keys.indexOf(d);
     })
     .attr("transform", (d) => "translate(" + x(d) + ")")
     .each(function (d) {
       d3.select(this).call(d3.axisLeft().scale(y[d]));
     })
     .style("stroke-width", 1)
-    .on('mouseover', (d,i)=>{
-      var k = keys.indexOf(i)
-      d3.select('#adsorbate-'+k).style('stroke-width',3)
+    .on("mouseover", (d, i) => {
+      var k = keys.indexOf(i);
+      d3.select("#adsorbate-" + k).style("stroke-width", 3);
     })
-    .on('mouseleave', (d,i)=>{
-      var k = keys.indexOf(i)
-      d3.select('#adsorbate-'+k).style('stroke-width',1)
+    .on("mouseleave", (d, i) => {
+      var k = keys.indexOf(i);
+      d3.select("#adsorbate-" + k).style("stroke-width", 1);
     })
     .append("text")
     .style("text-anchor", "left")
@@ -376,9 +382,7 @@ const createParallelPlot = () => {
     .text((d) => d)
     .style("fill", "black")
     .style("font-weight", "500");
-
 };
-
 
 const loadData = (file) => {
   // read the csv file
@@ -414,17 +418,21 @@ const loadData = (file) => {
   });
 };
 
-const filterFromPeriodic=()=>{
-  let clickedArr = Array.from(clicked)
-  currdata = data.filter((item)=>clickedArr.some((val)=>{
-    return (item.bulk_symbols.includes(val))
-  }))
+const filterFromPeriodic = () => {
+  let clickedArr = Array.from(clicked);
+  currdata = data.filter((item) =>
+    clickedArr.some((val) => {
+      return item.bulk_symbols.includes(val);
+    })
+  );
   plotMillerIndices(currdata);
   foreground.style("display", function (d) {
-    return clickedArr.some((val)=>{
-      return (d.bulk_symbols.includes(val))
-    })? null:'none'
-  })
-}
+    return clickedArr.some((val) => {
+      return d.bulk_symbols.includes(val);
+    })
+      ? null
+      : "none";
+  });
+};
 
 loadData("./data/clean_data_vds_new.csv");
