@@ -1,5 +1,5 @@
 # Final-Project---Adsorption-Viz
-View the final Project of Adsorption Analysis here
+View the final outcome of Adsorption Analysis here
 https://vikramabhisheksah.github.io/Adsorption-Analysis/
 
 
